@@ -7,14 +7,19 @@ import pytesseract
 def image_query(text_query, image_location):
     # 2. Convert image to image string
     image_string = image_to_string(image_location)
-    image_boxes = find_text_matches(text_query, image_location, image_string)
+    image_boxes = locate_text_matches(text_query, image_location, image_string)
     if image_boxes:
-        # TODO: Determine the query box
+        # TODO: Determine the xy coords of the box containing the query string.
         
     else:
         return
 
 def image_to_string(input_image):
+    """
+    Takes in a string representing an image's name.
+    Utilizes pytesseract OCR to generate a string from the image.
+    Returns the image string.
+    """
     found = False
     while not found:
         try:
@@ -27,8 +32,14 @@ def image_to_string(input_image):
     print(f'\nI recognized:\n {image_string}')
     return image_string
 
-def find_text_matches(text_query, image_location, image_string):
-    # 3. Find text query matches in the image string
+def locate_text_matches(text_query, image_location, image_string):
+    """
+    Takes in a string representing the text query.
+    Takes in a string representing the image's location
+    Takes in a string representing character recognized in the image.
+    Searches the image string for the contents of the text query.
+    Returns a string of box locations of matched characters or None if there are not matches. 
+    """
     regex_object = re.compile(f'(^|\s)({text_query})(\s)', re.IGNORECASE)
     match_object = regex_object.search(image_string)
 

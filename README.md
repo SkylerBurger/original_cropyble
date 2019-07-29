@@ -13,7 +13,7 @@ Cropyble is a module that allows a user to create a cropped image by simply sear
 - Create a Python virtual environment from within the top-level directory of this repo with `pipenv shell`
 - Install the required dependencies within your virtaul environment with `pipenv install`
 - Put images you'd like to OCR into the /input_images directory
-- Run main.py with `python main.py`
+- Run main.py with `cropyble.py`
 
 ## Architecture
 ### Packages
@@ -23,7 +23,7 @@ Cropyble is a module that allows a user to create a cropped image by simply sear
 
 
 ## API
-- **Cropable()**: Takes an input image location, performs OCR and stores the results for future crops.
+- **Cropyble()**: Takes an input image location, performs OCR and stores the results for future crops.
 - **.crop()**: Takes in a query string representing the word you'd like cropped from the image. Generates and saves a cropped copy of the original image based on the query string.
 
 

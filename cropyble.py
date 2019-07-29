@@ -2,7 +2,7 @@ from PIL import Image
 import pytesseract
 
 
-class Cropable:
+class Cropyble:
     """Container for OCR and cropping methods."""
     def __init__(self, input_image):
         self.input_image = input_image
@@ -17,6 +17,7 @@ class Cropable:
         found_image = False
         while not found_image:
             try:
+                print('Please wait.....')
                 image_string = pytesseract.image_to_string(Image.open(f'input_images/{self.input_image}'))
                 box_data = pytesseract.image_to_data(Image.open(f'input_images/{self.input_image}'))
                 found_image = True
@@ -45,7 +46,7 @@ class Cropable:
         Checks box data to see if the query is present in the image.
         Returns the bounding box coordinates for the query if present.
         """
-        # TODO: Figure out how to properly respond if query is not located.
+        # TODO: Figure out best way to properly respond if query is not located.
         lines = [line.split('\t') for line in self.box_data]
         word_box = []
         for line in lines:
@@ -74,4 +75,13 @@ class Cropable:
                                         coordinates[3]))
         # TODO: Allow user to specify the output file name and location
         new_image.save('output.jpg')
-        print('Results saves as output.jpb')
+        print('Results saved as output.jpg')
+
+
+if __name__ == "__main__":
+
+    input_image = input('\nWhich image would you like to search?: ')
+    my_image = Cropyble(input_image)
+
+    text_query = input('\nWhat text would you like to search for?: ')
+    my_image.crop(text_query)

@@ -8,7 +8,7 @@ Cropyble is a module that allows a user to create a cropped image by simply sear
 
 ## Getting Started
 ### Linux
-- Clone this repo to your machine with `git clone https://github.com/SkylerBurger/text_to_crop.git`
+- Clone this repo to your machine with `git clone https://github.com/SkylerBurger/cropyble.git`
 - Install tesseract on your machine with `sudo apt-get install tesseract-ocr`
 - Create a Python virtual environment from within the top-level directory of this repo with `pipenv shell`
 - Install the required dependencies within your virtaul environment with `pipenv install`

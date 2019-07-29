@@ -4,7 +4,7 @@
 **Version**: 2.0.0
 
 ## Overview
-Cropyble is a module that allows a user to create a cropped image by simply searching an image for text. This module utilizes optical character recognition (OCR) from Google by way of pytesseract. Currently, input images will need to be of printed text and not handwriting for Cropyble to work properly.
+Cropyble is a module that allows a user to create a cropped image by simply searching an image for text. This module utilizes optical character recognition (OCR) from Google by way of pytesseract. Currently, input images will need to be of printed text for Cropyble to work properly.
 
 ## Getting Started
 ### Linux
@@ -12,7 +12,7 @@ Cropyble is a module that allows a user to create a cropped image by simply sear
 - Install tesseract on your machine with `sudo apt-get install tesseract-ocr`
 - Create a Python virtual environment from within the top-level directory of this repo with `pipenv shell`
 - Install the required dependencies within your virtaul environment with `pipenv install`
-- Put images you'd like to OCR into the /input_images directory
+- Copy images you'd like to OCR into the /input_images directory
 - Run main.py with `cropyble.py`
 
 ## Architecture

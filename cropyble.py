@@ -37,10 +37,10 @@ class Cropyble:
         Takes in a text query string.
         Outputs an image of the query from the input image if present.
         """
-        word_box = self.find_word_box(text_query)
-        self.crop_image(word_box)
+        word_box = self._find_word_box(text_query)
+        self._crop_image(word_box)
 
-    def find_word_box(self, text_query):
+    def _find_word_box(self, text_query):
         """
         Takes in a search query.
         Checks box data to see if the query is present in the image.
@@ -62,7 +62,7 @@ class Cropyble:
                     (int(word_box[0][7]) + int(word_box[0][9]))]
         return word_box
 
-    def crop_image(self, coordinates):
+    def _crop_image(self, coordinates):
         """
         Takes in bounding box coordinates for a word in the image.
         Generates a cropped copy of the original image and saves it.

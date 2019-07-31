@@ -23,16 +23,13 @@ Cropyble is a module that allows a user to create a cropped image by simply sear
 
 
 ## API
-- **Cropyble()**: Takes an input image location, performs OCR and stores the results for future crops.
-- **.crop()**: Takes in a query string representing the word you'd like cropped from the image. Generates and saves a cropped copy of the original image based on the query string.
+- **Cropyble()**: Takes in an input image location then performs OCR on the image and stores the bounding box results for future crops.
+- **.crop()**: Takes in a string representing the word you'd like cropped from the image and the output image path. Generates a cropped copy of the word from the original image and saves it at the specified location.
 
 
 ## Roadmap
-- Installation instructions for other systems
-- Integration with a handwriting recognition package
 - Multiple match results
-- Match highlighting applied to original image
-- Proper Python packaging structure 
+- Integrate a handwriting recognition package
 
 ## Change Log
 07/22/2019 - 0.1.0
@@ -42,4 +39,4 @@ Cropyble is a module that allows a user to create a cropped image by simply sear
 - Refactored cropping functions into a class to minimize work needed to perform multiple crops on a single image.
 
 07/30/2019 - 0.3.0
-- Cropyble can now accept a path for the input image and the output image.
+- Cropyble can now accept a path for the input image and crop() accepts a path for the output image.

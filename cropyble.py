@@ -6,10 +6,9 @@ import pytesseract
 
 class Cropyble:
     """Container for OCR and cropping methods."""
-    def __init__(self, input_image, output_image):
+    def __init__(self, input_image):
         """Initializes a Cropyble object."""
         self.input_image_path = os.path.join(os.getcwd(), input_image)
-        self.output_image_path = os.path.join(os.getcwd(), output_image)
         self.box_data = self.image_to_data()
 
     def image_to_data(self):
@@ -25,8 +24,8 @@ class Cropyble:
                 box_data = pytesseract.image_to_data(Image.open(self.input_image_path))
                 found_image = True
             except FileNotFoundError:
-                print(f'\nThe file [{self.input_image}] was not found.')
-                self.input_image = input('Please enter the path for the image you\'d like to search: ')
+                print(f'\nThe file [{self.input_image_path}] was not found.')
+                self.input_image_path = input('Please enter the path for the image you\'d like to search: ')
 
         box_data = box_data.split('\n')
         box_data = box_data[1:]
@@ -35,13 +34,13 @@ class Cropyble:
         print(f'\nRecognized Text:\n {image_string}')
         return box_data
 
-    def crop(self, text_query):
+    def crop(self, text_query, output_path):
         """
         Takes in a text query string.
         Outputs an image of the query from the input image if present.
         """
         word_box = self._find_word_box(text_query)
-        self._crop_image(word_box)
+        self._crop_image(word_box, output_path)
 
     def _find_word_box(self, text_query):
         """
@@ -65,7 +64,7 @@ class Cropyble:
                     (int(word_box[0][7]) + int(word_box[0][9]))]
         return word_box
 
-    def _crop_image(self, coordinates):
+    def _crop_image(self, coordinates, output_path):
         """
         Takes in bounding box coordinates for a word in the image.
         Generates a cropped copy of the original image and saves it.
@@ -77,15 +76,16 @@ class Cropyble:
                                         coordinates[2],
                                         coordinates[3]))
 
-        new_image.save(self.output_image_path)
-        print(f'Finished!\nResults saved at: {self.output_image_path}\n')
+        output_path = os.path.join(os.getcwd(), output_path)
+        new_image.save(output_path)
+        print(f'Finished!\nResults saved at: {output_path}\n')
 
 
 if __name__ == "__main__":
 
     input_image = input('\nPlease enter the path for the image you\'d like to search: ')
-    output_image = input('\nPlease enter the path for the output image: ')
-    my_image = Cropyble(input_image, output_image)
+    output_path = input('\nPlease enter the path for the output image: ')
+    my_image = Cropyble(input_image)
 
     text_query = input('\nWhich word would you like to search for?: ')
-    my_image.crop(text_query)
+    my_image.crop(text_query, output_path)

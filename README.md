@@ -1,7 +1,7 @@
 # Cropyble
 
 **Author**: Skyler Burger
-**Version**: 2.0.0
+**Version**: 0.3.0
 
 ## Overview
 Cropyble is a module that allows a user to create a cropped image by simply searching an image for text. This module utilizes optical character recognition (OCR) from Google by way of pytesseract. Currently, input images will need to be of printed text for Cropyble to work properly.
@@ -35,8 +35,11 @@ Cropyble is a module that allows a user to create a cropped image by simply sear
 - Proper Python packaging structure 
 
 ## Change Log
-07/22/2019 - 1.1.0
+07/22/2019 - 0.1.0
 - Corrected bounding box math. Images are being properly cropped.
 
-07/27/2019 - 2.0.0
+07/27/2019 - 0.2.0
 - Refactored cropping functions into a class to minimize work needed to perform multiple crops on a single image.
+
+07/30/2019 - 0.3.0
+- Cropyble can now accept a path for the input image and the output image.

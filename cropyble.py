@@ -7,6 +7,7 @@ import pytesseract
 class Cropyble:
     """Container for OCR and cropping methods."""
     def __init__(self, input_image, output_image):
+        """Initializes a Cropyble object."""
         self.input_image_path = os.path.join(os.getcwd(), input_image)
         self.output_image_path = os.path.join(os.getcwd(), output_image)
         self.box_data = self.image_to_data()
@@ -77,14 +78,14 @@ class Cropyble:
                                         coordinates[3]))
 
         new_image.save(self.output_image_path)
-        print(f'Results saved at: {self.output_image_path}')
+        print(f'Finished!\nResults saved at: {self.output_image_path}\n')
 
 
 if __name__ == "__main__":
 
     input_image = input('\nPlease enter the path for the image you\'d like to search: ')
-    output_image = input('\n Please enter the path for the output image: ')
+    output_image = input('\nPlease enter the path for the output image: ')
     my_image = Cropyble(input_image, output_image)
 
-    text_query = input('\nWhat word would you like to search for?: ')
+    text_query = input('\nWhich word would you like to search for?: ')
     my_image.crop(text_query)

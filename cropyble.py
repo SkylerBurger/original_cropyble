@@ -9,7 +9,8 @@ class Cropyble:
     def __init__(self, input_image):
         """Initializes a Cropyble object."""
         self.input_image_path = os.path.join(os.getcwd(), input_image)
-        self.box_data = self.image_to_data()
+        self.box_data = {}
+        self.image_to_data()
 
     def image_to_data(self):
         """
@@ -21,60 +22,45 @@ class Cropyble:
             try:
                 print('Please wait.....')
                 image_string = pytesseract.image_to_string(Image.open(self.input_image_path))
-                box_data = pytesseract.image_to_data(Image.open(self.input_image_path))
+                word_box_data = pytesseract.image_to_data(Image.open(self.input_image_path))
+                char_box_data = pytesseract.image_to_boxes(Image.open(self.input_image_path))
                 found_image = True
             except FileNotFoundError:
                 print(f'\nThe file [{self.input_image_path}] was not found.')
                 self.input_image_path = input('Please enter the path for the image you\'d like to search: ')
-
-        box_data = box_data.split('\n')
-        box_data = box_data[1:]
-
+        
         # TODO: Raise an error if no text is recognized
         print(f'\nRecognized Text:\n {image_string}')
-        return box_data
+
+        self.normalize_word_boxes(word_box_data)
+        self.normalize_char_boxes(char_box_data)
+
+    def normalize_word_boxes(self, word_box_data):
+        word_box_data = word_box_data.split('\n')
+        word_box_data = word_box_data[1:]
+
+        lines = [line.split('\t') for line in word_box_data]
+        for line in lines:
+            self.box_data[line[11]] = [int(line[6]), int(line[7]), 
+                (int(line[6]) + int(line[8])), (int(line[7]) + int(line[9]))]
+
+    def normalize_char_boxes(self, char_box_data):
+        # TODO: Verify one entry per letter in alphabetical order (it confused a D with an O)
+        char_box_data = char_box_data.split('\n')
+        
+        lines = [line.split(' ') for line in char_box_data]
+        for line in lines:
+            self.box_data[line[0]] = [int(line[1]), int(line[2]), int(line[3]), int(line[4])]
 
     def crop(self, text_query, output_path):
         """
         Takes in a text query string.
         Outputs an image of the query from the input image if present.
         """
-        word_box = self._find_word_box(text_query)
-        self._crop_image(word_box, output_path)
-
-    def _find_word_box(self, text_query):
-        """
-        Takes in a search query.
-        Checks box data to see if the query is present in the image.
-        Returns the bounding box coordinates for the query if present.
-        """
-        # TODO: Figure out best way to properly respond if query is not located.
-        lines = [line.split('\t') for line in self.box_data]
-        word_box = []
-        for line in lines:
-            if line[11] == text_query:
-                print(f'\nI found: {text_query}')
-                word_box.append(line)
-                break
-        if len(word_box) == 0:
-            return
-        word_box = [int(word_box[0][6]), 
-                    int(word_box[0][7]), 
-                    (int(word_box[0][6]) + int(word_box[0][8])), 
-                    (int(word_box[0][7]) + int(word_box[0][9]))]
-        return word_box
-
-    def _crop_image(self, coordinates, output_path):
-        """
-        Takes in bounding box coordinates for a word in the image.
-        Generates a cropped copy of the original image and saves it.
-        """
         original_image = Image.open(self.input_image_path)
+        box = self.box_data[text_query]
         
-        new_image = original_image.crop((coordinates[0], 
-                                        coordinates[1], 
-                                        coordinates[2],
-                                        coordinates[3]))
+        new_image = original_image.crop((box[0], box[1], box[2], box[3]))
 
         output_path = os.path.join(os.getcwd(), output_path)
         new_image.save(output_path)

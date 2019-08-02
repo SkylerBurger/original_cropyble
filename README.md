@@ -1,18 +1,17 @@
 # Cropyble
 
 **Author**: Skyler Burger
-**Version**: 0.3.0
+**Version**: 1.1.0
 
 ## Overview
-Cropyble is a module that allows a user to create a cropped image by simply searching an image for text. This module utilizes optical character recognition (OCR) from Google by way of pytesseract. Currently, input images will need to be of printed text for Cropyble to work properly.
+Cropyble is a module that allows a user to easily perform crops on an image containing recognizable text. This module utilizes optical character recognition (OCR) from Google by way of pytesseract.
 
 ## Getting Started
-### Linux
+### Linux & Mac OS
 - Clone this repo to your machine with `git clone https://github.com/SkylerBurger/cropyble.git`
 - Install tesseract on your machine with `sudo apt-get install tesseract-ocr`
 - Create a Python virtual environment from within the top-level directory of this repo with `pipenv shell`
 - Install the required dependencies within your virtaul environment with `pipenv install`
-- Copy images you'd like to OCR into the /input_images directory
 - Run main.py with `cropyble.py`
 
 ## Architecture
@@ -21,15 +20,12 @@ Cropyble is a module that allows a user to create a cropped image by simply sear
 - [**pytesseract**](https://github.com/madmaze/pytesseract)
 - [**tesseract**](https://github.com/tesseract-ocr/tesseract)
 
+### Python Standard Library
+- [**os**](https://docs.python.org/3/library/os.html)
 
 ## API
-- **Cropyble()**: Takes in an input image location then performs OCR on the image and stores the bounding box results for future crops.
-- **.crop()**: Takes in a string representing the word you'd like cropped from the image and the output image path. Generates a cropped copy of the word from the original image and saves it at the specified location.
-
-
-## Roadmap
-- Multiple match results
-- Integrate a handwriting recognition package
+- **Cropyble()**: Takes in a string representing the input image location. Cropyble runs OCR on the image and stores the bounding boxes for recognized words and characters for future crops.
+- **.crop()**: Takes in a string representing the word or character you'd like cropped from the image and a second string representing the output image path. Generates a cropped copy of the query text from the original image and saves it at the specified location.
 
 ## Change Log
 07/22/2019 - 0.1.0
@@ -40,3 +36,6 @@ Cropyble is a module that allows a user to create a cropped image by simply sear
 
 07/30/2019 - 0.3.0
 - Cropyble can now accept a path for the input image and crop() accepts a path for the output image.
+
+08/02/2019 - 1.1.0
+- Cropyble can now crop words and characters recognized within an image using the same crop() method.

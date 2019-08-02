@@ -10,9 +10,11 @@ class Cropyble:
         """Initializes a Cropyble object."""
         self.input_image_path = os.path.join(os.getcwd(), input_image)
         self.box_data = {}
-        self.image_to_data()
+        self.height = 0
+        self.width = 0
+        self._image_to_data()
 
-    def image_to_data(self):
+    def _image_to_data(self):
         """
         Utilizes pytesseract OCR to generate bounding box data for the image.
         Returns the bounding box data.
@@ -21,21 +23,28 @@ class Cropyble:
         while not found_image:
             try:
                 print('Please wait.....')
-                image_string = pytesseract.image_to_string(Image.open(self.input_image_path))
-                word_box_data = pytesseract.image_to_data(Image.open(self.input_image_path))
-                char_box_data = pytesseract.image_to_boxes(Image.open(self.input_image_path))
+                input_image = Image.open(self.input_image_path)
                 found_image = True
             except FileNotFoundError:
                 print(f'\nThe file [{self.input_image_path}] was not found.')
                 self.input_image_path = input('Please enter the path for the image you\'d like to search: ')
         
+        image_string = pytesseract.image_to_string(input_image)
+        word_box_data = pytesseract.image_to_data(input_image)
+        char_box_data = pytesseract.image_to_boxes(input_image)
+        self.width, self.height = input_image.size
+        print(f'Width: {self.width}, Height: {self.height}')
         # TODO: Raise an error if no text is recognized
         print(f'\nRecognized Text:\n {image_string}')
 
-        self.normalize_word_boxes(word_box_data)
-        self.normalize_char_boxes(char_box_data)
+        self._normalize_word_boxes(word_box_data)
+        self._normalize_char_boxes(char_box_data)
 
-    def normalize_word_boxes(self, word_box_data):
+    def _normalize_word_boxes(self, word_box_data):
+        """
+        Takes in bounding box data for words from pytesseract.
+        Stores the word and X,Y coordinates for its bounding box in self.box_data
+        """
         word_box_data = word_box_data.split('\n')
         word_box_data = word_box_data[1:]
 
@@ -44,13 +53,16 @@ class Cropyble:
             self.box_data[line[11]] = [int(line[6]), int(line[7]), 
                 (int(line[6]) + int(line[8])), (int(line[7]) + int(line[9]))]
 
-    def normalize_char_boxes(self, char_box_data):
-        # TODO: Verify one entry per letter in alphabetical order (it confused a D with an O)
+    def _normalize_char_boxes(self, char_box_data):
+        """
+        Takes in bounding box data for characters from pytesseract.
+        Stores the character and X,Y coordinates for its bounding box in self.box_data
+        """
         char_box_data = char_box_data.split('\n')
         
         lines = [line.split(' ') for line in char_box_data]
         for line in lines:
-            self.box_data[line[0]] = [int(line[1]), int(line[2]), int(line[3]), int(line[4])]
+            self.box_data[line[0]] = [int(line[1]), (self.height - int(line[4])), int(line[3]), (self.height - int(line[2]))]
 
     def crop(self, text_query, output_path):
         """
